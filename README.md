@@ -3,6 +3,12 @@
 ## What is Boss Manager
 Boss Manager is a plugin that adds some Boss commands and more support with preventing bosses
 
+## Features 
+- Disable specific bosses
+- Prevent players to join during a boss fight
+- Command to Modify the game stage
+- Command to List defeated bosses in the world
+
 ## Commands & Permissions 
 - /undoboss
 Change the game stage to whether a Boss has been defeated before
