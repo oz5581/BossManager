@@ -1,7 +1,5 @@
 # BossManager
-A tShock plugin for Terraria which adds more Boss Management Tools
-
-----
+A tShock plugin for Terraria that adds more Boss Management Tools. [Download Here!](https://github.com/Ozz5581/BossManager/releases/download/main/BossManager.dll)
 
 ## Features
 - Disable Specific Bosses
