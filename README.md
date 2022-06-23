@@ -1,7 +1,5 @@
-# BossManager - A tShock plugin for Terraria
-
-## What is Boss Manager
-A Plugin to add more control for Boss Management
+# BossManager
+A tShock plugin for Terraria which adds more Boss Management Tools
 
 ----
 
