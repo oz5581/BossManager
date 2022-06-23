@@ -1,9 +1,15 @@
 # BossManager
-A tShock plugin for Terraria that adds more Boss Management Tools. [Download Here!](https://github.com/Ozz5581/BossManager/releases/download/main/BossManager.dll)
+A tShock plugin for Terraria that adds more Boss Management Tools. [Download](https://github.com/Ozz5581/BossManager/releases/download/main/BossManager.dll)
+
+## How to Install
+- 1 - Download the Plugin File [ Here!](https://github.com/Ozz5581/BossManager/releases/download/main/BossManager.dll)
+- 2 - Drop the `BossManager.dll` File into the `ServerPlugins` Folder
+- 3 - Start your TShock Server
 
 ## Features
 - Disable Specific Bosses
 - Prevent Players to Join during a Boss Fight
+- Adds Useful Boss Related Commands
 
 ## Commands & Permissions 
 UndoBoss Command
@@ -23,7 +29,11 @@ BossManager Reload Command:
 - Description: Reload the BossManager Plugin
 - Permission: ` bossmgr.reload `
 
-----
+## How to Enable/Disable a Boss
+- Open the BossManager Config File at `/tshock/BossManagerConfig.json`
+- Change `true` to `false` or vise versa to Enable/Disable a Setting
+- Type ` /bossrel ` in the chat to reload the your configurations 
+
 
 ## Boss Aliases
 
