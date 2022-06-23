@@ -10,11 +10,17 @@ A Plugin to add more control for Boss Management
 - Prevent Players to Join during a Boss Fight
 
 ## Commands & Permissions 
-- UndoBoss Command: ` /undoboss ` ( ` /uboss ` )
-Toggle a Bosses Defeated State | Permission: ` bossmgr.undoboss `
+UndoBoss Command
+- Command Aliases: ` /undoboss `, ` /uboss `
+- Description: Toggle a Bosses Defeated State
+- Permission: ` bossmgr.undoboss `
 
-- ListBoss Command: ` /listboss ` ( ` /lboss ` , ` /bosses ` )
-List Defeated Bosses | Permission: ` bossmgr.listboss `
+ListBoss Command: 
+- Command Aliases: ` /listboss `, ` /lboss ` , ` /bosses `
+- Description: List Defeated Bosses
+- Permission: ` bossmgr.listboss `
 
-- BossManager Reload Command: ` /bossrel `
-Reload the BossManager Plugin | Permission: ` bossmgr.reload `
+BossManager Reload Command: 
+- Command Aliases: ` /bossrel `
+- Description: Reload the BossManager Plugin
+- Permission: ` bossmgr.reload `
