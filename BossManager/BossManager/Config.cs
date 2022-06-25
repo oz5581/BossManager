@@ -31,6 +31,9 @@ namespace BossManagerConfig
 		public bool AllowMoonLord;
 		public bool AllowJoinDuringBoss;
 
+		public bool PreventIllegalBoss;
+		public int RequiredPlayersforBoss;
+
 		public static Config Read()
 		{
 
@@ -56,6 +59,8 @@ namespace BossManagerConfig
 			return new Config()
 			{
 				AllowJoinDuringBoss = true,
+				PreventIllegalBoss = false,
+				RequiredPlayersforBoss = 1,
 
 				AllowKingSlime = true,
 				AllowEyeOfCthulhu = true,

@@ -59,7 +59,7 @@ namespace BossManager
         private void ReloadCommand(CommandArgs args)
         {
             Config = Config.Read();
-            args.Player.SendInfoMessage("DisableBoss config reloaded!");
+            args.Player.SendInfoMessage("BossManager config reloaded!");
         }
 
         public void OnJoin(JoinEventArgs args)
@@ -333,6 +333,67 @@ namespace BossManager
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC npc = Main.npc[i];
+
+                if (Config.PreventIllegalBoss)
+                {
+                    if (!Main.hardMode && (
+                        npc.type == NPCID.QueenSlimeBoss ||
+                        npc.type == NPCID.TheDestroyer ||
+                        npc.type == NPCID.Retinazer ||
+                        npc.type == NPCID.Spazmatism ||
+                        npc.type == NPCID.SkeletronPrime ||
+                        npc.type == NPCID.DukeFishron))
+                    {
+                        Main.npc[i].active = false;
+                        Main.npc[i].type = 0;
+                        TSPlayer.All.SendData(PacketTypes.NpcUpdate, "", i);
+                    }
+
+                    if (!NPC.downedMechBoss1 && !NPC.downedMechBoss2 && !NPC.downedMechBoss3 && (npc.type == NPCID.Plantera))
+                    {
+                        Main.npc[i].active = false;
+                        Main.npc[i].type = 0;
+                        TSPlayer.All.SendData(PacketTypes.NpcUpdate, "", i);
+                    }
+                    if (!NPC.downedPlantBoss && (npc.type == NPCID.HallowBoss || npc.type == NPCID.EmpressButterfly || npc.type == NPCID.Golem))
+                    {
+                        Main.npc[i].active = false;
+                        Main.npc[i].type = 0;
+                        TSPlayer.All.SendData(PacketTypes.NpcUpdate, "", i);
+                    }
+                    if (!NPC.downedGolemBoss && (npc.type == NPCID.CultistBoss || npc.type == NPCID.MoonLordCore))
+                    {
+                        Main.npc[i].active = false;
+                        Main.npc[i].type = 0;
+                        TSPlayer.All.SendData(PacketTypes.NpcUpdate, "", i);
+                    }
+                }
+
+                if (TShock.Utils.GetActivePlayerCount() < Config.RequiredPlayersforBoss && (
+                    !NPC.downedSlimeKing && npc.type == NPCID.KingSlime ||
+                    !NPC.downedBoss1 && npc.type == NPCID.EyeofCthulhu ||
+                    !NPC.downedBoss2 && !WorldGen.crimson && npc.type == NPCID.EaterofWorldsHead ||
+                    !NPC.downedBoss2 && WorldGen.crimson && npc.type == NPCID.BrainofCthulhu ||
+                    !NPC.downedDeerclops && npc.type == NPCID.Deerclops ||
+                    !NPC.downedBoss3 && npc.type == NPCID.SkeletronHead ||
+                    !NPC.downedQueenBee && npc.type == NPCID.QueenBee ||
+                    !Main.hardMode && npc.type == NPCID.WallofFlesh ||
+                    !NPC.downedQueenSlime && npc.type == NPCID.QueenSlimeBoss ||
+                    !NPC.downedMechBoss1 && npc.type == NPCID.TheDestroyer ||
+                    !NPC.downedMechBoss2 && npc.type == NPCID.Retinazer ||
+                    !NPC.downedMechBoss2 && npc.type == NPCID.Spazmatism ||
+                    !NPC.downedMechBoss3 && npc.type == NPCID.SkeletronPrime ||
+                    !NPC.downedPlantBoss && npc.type == NPCID.Plantera ||
+                    !NPC.downedGolemBoss && npc.type == NPCID.Golem ||
+                    !NPC.downedFishron && npc.type == NPCID.DukeFishron ||
+                    !NPC.downedMoonlord && npc.type == NPCID.MoonLordCore ||
+                    !NPC.downedAncientCultist && npc.type == NPCID.CultistBoss ||
+                    !NPC.downedEmpressOfLight && npc.type == NPCID.HallowBoss))
+                {
+                    Main.npc[i].active = false;
+                    Main.npc[i].type = 0;
+                    TSPlayer.All.SendData(PacketTypes.NpcUpdate, "", 0);
+                }
 
                 if (!Config.AllowKingSlime && npc.type == NPCID.KingSlime) // King Slime
                 {
