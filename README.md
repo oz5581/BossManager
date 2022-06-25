@@ -31,9 +31,23 @@ BossManager Reload Command:
 
 ## How to Enable/Disable a Boss
 - Open the BossManager Config File at `/tshock/BossManagerConfig.json`
-- Change `true` to `false` or vise versa to Enable/Disable a Setting
+- Change `true` to `false` or vise versa to change a setting
 - Type ` /bossrel ` in the chat to reload the your configurations 
 
+## Configuration File Options
+
+AllowJoinDuringBoss
+- Default: ` true `
+- Description: Allow Players to Join the Server during a Boss Fight
+
+PreventIllegalBoss
+- Default: ` false `
+- Description: Prevent Bosses from being spawned illegally (eg. Plantera before WoF)
+
+RequiredPlayersforBoss
+- Default: ` 1 `
+- Description: The required amount of online players needed to spawn a Boss
+- Note - This setting doesn't apply to Bosses that have already been defeated)
 
 ## Boss Aliases
 
