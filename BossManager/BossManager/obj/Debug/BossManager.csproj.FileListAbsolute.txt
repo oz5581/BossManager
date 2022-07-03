@@ -9,3 +9,14 @@ C:\Users\User\Desktop\OzzTerraria Survival Server\Plugin References\Unused Plugi
 C:\Users\User\Desktop\OzzTerraria Survival Server\Plugin References\Unused Plugins\BossManager\BossManager\obj\Debug\BossManager.csproj.CopyComplete
 C:\Users\User\Desktop\OzzTerraria Survival Server\Plugin References\Unused Plugins\BossManager\BossManager\obj\Debug\BossManager.dll
 C:\Users\User\Desktop\OzzTerraria Survival Server\Plugin References\Unused Plugins\BossManager\BossManager\obj\Debug\BossManager.pdb
+H:\Plugin Source Code\Modified Plugins\BossManager\BossManager\bin\Debug\BossManager.dll
+H:\Plugin Source Code\Modified Plugins\BossManager\BossManager\bin\Debug\BossManager.pdb
+H:\Plugin Source Code\Modified Plugins\BossManager\BossManager\bin\Debug\Newtonsoft.Json.dll
+H:\Plugin Source Code\Modified Plugins\BossManager\BossManager\bin\Debug\OTAPI.dll
+H:\Plugin Source Code\Modified Plugins\BossManager\BossManager\bin\Debug\TerrariaServer.exe
+H:\Plugin Source Code\Modified Plugins\BossManager\BossManager\bin\Debug\TShockAPI.dll
+H:\Plugin Source Code\Modified Plugins\BossManager\BossManager\obj\Debug\BossManager.csproj.AssemblyReference.cache
+H:\Plugin Source Code\Modified Plugins\BossManager\BossManager\obj\Debug\BossManager.csproj.CoreCompileInputs.cache
+H:\Plugin Source Code\Modified Plugins\BossManager\BossManager\obj\Debug\BossManager.csproj.CopyComplete
+H:\Plugin Source Code\Modified Plugins\BossManager\BossManager\obj\Debug\BossManager.dll
+H:\Plugin Source Code\Modified Plugins\BossManager\BossManager\obj\Debug\BossManager.pdb

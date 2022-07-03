@@ -16,7 +16,7 @@ namespace BossManager
         public override string Author => "Ozz5581";
         public override string Description => "Boss Management Tools";
         public override string Name => "BossManager";
-        public override Version Version => new Version(1, 0, 0, 0);
+        public override Version Version => new Version(1, 2, 0, 0);
 
         public BossManagerPlugin(Main game) : base(game)
         {
@@ -73,119 +73,102 @@ namespace BossManager
 
         private void ListBossCommand(CommandArgs args)
         {
-            string subCmd = args.Parameters.Count == 0 ? "listboss" : args.Parameters[0].ToLower();
 
-            switch (subCmd)
+            var BossList = new List<string>();
             {
-                case "boss":
-                    {
-                        var BossList = new List<string>();
-                        {
-                            if (NPC.downedSlimeKing)
-                                BossList.Add("King Slime");
+                if (NPC.downedSlimeKing)
+                    BossList.Add("King Slime");
 
-                            if (NPC.downedBoss1)
-                                BossList.Add("Eye of Cthulhu");
+                if (NPC.downedBoss1)
+                    BossList.Add("Eye of Cthulhu");
 
-                            if (NPC.downedBoss2)
-                            {
-                                if (WorldGen.crimson)
-                                    BossList.Add("Brain of Cthulhu");
-                                else
-                                    BossList.Add("Eater of Worlds");
-                            }
+                if (NPC.downedBoss2)
+                {
+                    if (WorldGen.crimson)
+                        BossList.Add("Brain of Cthulhu");
+                    else
+                        BossList.Add("Eater of Worlds");
+                }
 
-                            if (NPC.downedDeerclops)
-                                BossList.Add("Deerclops");
+                if (NPC.downedDeerclops)
+                    BossList.Add("Deerclops");
 
-                            if (NPC.downedBoss3)
-                                BossList.Add("Skeletron");
+                if (NPC.downedBoss3)
+                    BossList.Add("Skeletron");
 
-                            if (NPC.downedQueenBee)
-                                BossList.Add("Queen Bee");
+                if (NPC.downedQueenBee)
+                    BossList.Add("Queen Bee");
 
-                            if (Main.hardMode)
-                                BossList.Add("Wall of Flesh");
+                if (Main.hardMode)
+                    BossList.Add("Wall of Flesh");
 
-                            if (NPC.downedQueenSlime)
-                                BossList.Add("Queen Slime");
+                if (NPC.downedQueenSlime)
+                    BossList.Add("Queen Slime");
 
-                            if (NPC.downedMechBoss1)
-                                BossList.Add("The Destroyer");
+                if (NPC.downedMechBoss1)
+                    BossList.Add("The Destroyer");
 
-                            if (NPC.downedMechBoss2)
-                                BossList.Add("The Twins");
+                if (NPC.downedMechBoss2)
+                    BossList.Add("The Twins");
 
-                            if (NPC.downedMechBoss3)
-                                BossList.Add("Skeletron Prime");
+                if (NPC.downedMechBoss3)
+                    BossList.Add("Skeletron Prime");
 
-                            if (NPC.downedPlantBoss)
-                                BossList.Add("Plantera");
+                if (NPC.downedPlantBoss)
+                    BossList.Add("Plantera");
 
-                            if (NPC.downedGolemBoss)
-                                BossList.Add("Golem");
+                if (NPC.downedGolemBoss)
+                    BossList.Add("Golem");
 
-                            if (NPC.downedFishron)
-                                BossList.Add("Duke Fishron");
+                if (NPC.downedFishron)
+                    BossList.Add("Duke Fishron");
 
-                            if (NPC.downedEmpressOfLight)
-                                BossList.Add("Empress of Light");
+                if (NPC.downedEmpressOfLight)
+                    BossList.Add("Empress of Light");
 
-                            if (NPC.downedAncientCultist)
-                                BossList.Add("Lunatic Cultist");
+                if (NPC.downedAncientCultist)
+                    BossList.Add("Lunatic Cultist");
 
-                            if (NPC.downedMoonlord)
-                                BossList.Add("Moon Lord");
-                        }
-
-                        if (String.IsNullOrEmpty(String.Join(", ", BossList)))
-                            args.Player.SendInfoMessage("No Bosses have been Defeated so far!");
-                        else
-                            args.Player.SendInfoMessage($"Defeated Bosses: {String.Join(", ", BossList)}");
-                    }
-                    return;
-                case "event":
-                    {
-                        var EventList = new List<string>();
-                        {
-                            if (NPC.downedGoblins)
-                                EventList.Add("Goblin Army");
-
-                            if (NPC.downedPirates)
-                                EventList.Add("Pirate Invasion");
-
-                            if (NPC.downedClown)
-                                EventList.Add("Blood Moon");
-
-                            if (NPC.downedFrost)
-                                EventList.Add("Frost Legion");
-
-                            if (NPC.downedMartians)
-                                EventList.Add("Martian Invasion");
-
-                            if (NPC.downedHalloweenTree)
-                                EventList.Add("Pumpkin Moon");
-
-                            if (NPC.downedChristmasTree)
-                                EventList.Add("Frost Moon");
-
-                            if (NPC.downedTowerNebula && NPC.downedTowerSolar && NPC.downedTowerStardust && NPC.downedTowerVortex)
-                                EventList.Add("The Pillars");
-                        }
-
-                        if (String.IsNullOrEmpty(String.Join(", ", EventList)))
-                            args.Player.SendInfoMessage("No Events have been Defeated so far!");
-                        else
-                            args.Player.SendInfoMessage($"Defeated Events: {String.Join(", ", EventList)}");
-                    }
-                    return;
-                default:
-                    args.Player.SendErrorMessage("Invalid Usage! Please specify Bosses or Events:");
-                    args.Player.SendInfoMessage(
-                        "/listboss boss - Lists Defeated Bosses\n" +
-                        "/listboss event - Lists Defeated Invasions");
-                    return;
+                if (NPC.downedMoonlord)
+                    BossList.Add("Moon Lord");
             }
+            var EventList = new List<string>();
+            {
+                if (NPC.downedGoblins)
+                    EventList.Add("Goblin Army");
+
+                if (NPC.downedPirates)
+                    EventList.Add("Pirate Invasion");
+
+                if (NPC.downedClown)
+                    EventList.Add("Blood Moon");
+
+                if (NPC.downedFrost)
+                    EventList.Add("Frost Legion");
+
+                if (NPC.downedMartians)
+                    EventList.Add("Martian Invasion");
+
+                if (NPC.downedHalloweenTree)
+                    EventList.Add("Pumpkin Moon");
+
+                if (NPC.downedChristmasTree)
+                    EventList.Add("Frost Moon");
+
+                if (NPC.downedTowerNebula && NPC.downedTowerSolar && NPC.downedTowerStardust && NPC.downedTowerVortex)
+                    EventList.Add("The Pillars");
+            }
+
+            if (String.IsNullOrEmpty(String.Join(", ", BossList)))
+                args.Player.SendInfoMessage("No Bosses have been Defeated so far!");
+            else
+                args.Player.SendInfoMessage($"[c/ffc500:Defeated Bosses:] {String.Join(", ", BossList)}");
+
+
+            if (String.IsNullOrEmpty(String.Join(", ", EventList)))
+                args.Player.SendInfoMessage("No Events have been Defeated so far!");
+            else
+                args.Player.SendInfoMessage($"[c/ffc500:Defeated Events:] {String.Join(", ", EventList)}");
         }
         private void UndoBossCommand(CommandArgs args)
         {
