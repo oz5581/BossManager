@@ -332,6 +332,12 @@ namespace BossManager
                     ToggleBoss(ref Config.AllowBrainOfCthulhu, args, "Brain of Cthulhu");
                     break;
 
+                case "deerclops":
+                case "deer":
+                case "dc":
+                    ToggleBoss(ref Config.AllowDeerclops, args, "Deerclops");
+                    break;
+
                 case "skeletron":
                 case "sans":
                     ToggleBoss(ref Config.AllowSkeletron, args, "Skeletron");
