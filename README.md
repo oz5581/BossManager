@@ -81,6 +81,11 @@ Brain of Cthulhu / Eater of Worlds:
 - ` brain `
 - ` eater `
 
+Deerclops
+- ` deerclops `
+- ` deer `
+- ` dc `
+
 Skeletron
 - ` skeletron `
 - ` sans `
