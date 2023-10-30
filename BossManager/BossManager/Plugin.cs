@@ -375,7 +375,7 @@ namespace BossManager
                     ToggleBoss(ref Config.AllowSkeletronPrime, args, "Skeletron Prime");
                     break;
                 case "plantera":
-                    ToggleBoss(ref Config.AllowPlantera, args, "Golem");
+                    ToggleBoss(ref Config.AllowPlantera, args, "Plantera");
                     break;
                 case "golem":
                     ToggleBoss(ref Config.AllowGolem, args, "Golem");
