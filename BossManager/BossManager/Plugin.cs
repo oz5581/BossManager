@@ -1,9 +1,10 @@
 ﻿using TerrariaApi.Server;
 using TShockAPI;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 using Terraria;
 using Terraria.ID;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Utilities;
+using Microsoft.Xna.Framework;
 
 namespace BossManager
 {
@@ -565,7 +566,16 @@ namespace BossManager
 
                 if (!Config.AllowSkeletronPrime && npc.type == NPCID.SkeletronPrime) // Skeletron Prime
                 {
-                    UpdateNpc(i);
+                    if (Main.zenithWorld)
+                    {
+                        npc.position = new Vector2(int.MinValue, int.MinValue);
+                        npc.velocity = new Vector2(int.MinValue, int.MinValue);
+                        TSPlayer.All.SendData(PacketTypes.NpcUpdate, number: i);
+                    }
+                    else
+                    {
+                        UpdateNpc(i);
+                    }
                 }
 
                 if (!Config.AllowPlantera && npc.type == NPCID.Plantera) // Plantera
