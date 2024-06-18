@@ -1,0 +1,13 @@
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/bin/Debug/net6.0/HttpServer.dll
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/bin/Debug/net6.0/BossManager.deps.json
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/bin/Debug/net6.0/BossManager.dll
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/bin/Debug/net6.0/ref/BossManager.dll
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/bin/Debug/net6.0/BossManager.pdb
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/obj/Debug/net6.0/BossManager.csproj.AssemblyReference.cache
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/obj/Debug/net6.0/BossManager.GeneratedMSBuildEditorConfig.editorconfig
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/obj/Debug/net6.0/BossManager.AssemblyInfoInputs.cache
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/obj/Debug/net6.0/BossManager.AssemblyInfo.cs
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/obj/Debug/net6.0/BossManager.csproj.CoreCompileInputs.cache
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/obj/Debug/net6.0/BossManager.dll
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/obj/Debug/net6.0/ref/BossManager.dll
+/home/soofa/DotnetProjects/BossManager/BossManager/BossManager/obj/Debug/net6.0/BossManager.pdb
