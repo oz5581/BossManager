@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Newtonsoft.Json;
 using Microsoft.Xna.Framework;
+using Terraria.Localization;
 
 namespace BossManager
 {
@@ -14,6 +15,9 @@ namespace BossManager
         {
             ServerApi.Hooks.NpcSpawn.Register(this, OnNpcSpawn);
             ServerApi.Hooks.ServerJoin.Register(this, OnJoin);
+            ServerApi.Hooks.ServerBroadcast.Register(this, OnServerBroadcast);
+
+            GetDataHandlers.PlayerUpdate += OnPlayerUpdate;
 
             Commands.ChatCommands.Add(new Command("bossmgr.reload", ReloadCommand, "bossrel")
             {
@@ -36,13 +40,53 @@ namespace BossManager
             });
         }
 
+        private void OnPlayerUpdate(object? sender, GetDataHandlers.PlayerUpdateEventArgs args)
+        {
+            TSPlayer plr = args.Player;
+            if (args.Control.IsUsingItem && IsSpawnerItem(plr.SelectedItem))
+            {
+                if (!IsBossSpawnable(GetBossNetIDFromSpawner(plr.SelectedItem.netID)))
+                {
+                    plr.SendErrorMessage("This boss is disabled!");
+
+                    NetMessage.SendData((int)PacketTypes.PlayerSlot, -1, -1, NetworkText.FromLiteral(plr.SelectedItem.Name), plr.Index, plr.TPlayer.selectedItem);
+                    NetMessage.SendData((int)PacketTypes.PlayerSlot, plr.Index, -1, NetworkText.FromLiteral(plr.SelectedItem.Name), plr.Index, plr.TPlayer.selectedItem);
+                }
+            }
+        }
+
+        private void OnServerBroadcast(ServerBroadcastEventArgs args)
+        {
+            string text = args.Message.ToString();
+
+            if (text.EndsWith(" has awoken!"))
+            {
+                args.Message._mode = NetworkText.Mode.LocalizationKey;
+                text = args.Message.ToString();
+
+                string bossName = text[..text.IndexOf(" has awoken!")];
+
+                foreach (NPC npc in Main.npc)
+                {
+                    if (npc.FullName.StartsWith(bossName) && npc.type == 0 && !npc.active)
+                    {
+                        args.Handled = true;
+                    }
+                }
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 ServerApi.Hooks.NpcSpawn.Deregister(this, OnNpcSpawn);
                 ServerApi.Hooks.ServerJoin.Deregister(this, OnJoin);
+                ServerApi.Hooks.ServerBroadcast.Deregister(this, OnServerBroadcast);
+
+                GetDataHandlers.PlayerUpdate -= OnPlayerUpdate;
             }
+
             base.Dispose(disposing);
         }
 
@@ -450,125 +494,9 @@ namespace BossManager
         {
             NPC npc = Main.npc[args.NpcId];
 
-
-            //NPC npc = Main.npc[i];
-
-            if (Config.PreventIllegalBoss)
+            if (!IsBossSpawnable(npc.netID))
             {
-                if (!Main.hardMode &&
-                    (npc.type == NPCID.QueenSlimeBoss ||
-                    npc.type == NPCID.TheDestroyer ||
-                    npc.type == NPCID.Retinazer ||
-                    npc.type == NPCID.Spazmatism ||
-                    npc.type == NPCID.SkeletronPrime ||
-                    npc.type == NPCID.DukeFishron))
-                {
-                    UpdateNpc(args.NpcId);
-                }
-
-                if (!NPC.downedMechBoss1 && !NPC.downedMechBoss2 && !NPC.downedMechBoss3 &&
-                    npc.type == NPCID.Plantera)
-                {
-                    UpdateNpc(args.NpcId);
-                }
-
-                if (!NPC.downedPlantBoss &&
-                    (npc.type == NPCID.HallowBoss || npc.type == NPCID.EmpressButterfly || npc.type == NPCID.Golem))
-                {
-                    UpdateNpc(args.NpcId);
-                }
-
-                if (!NPC.downedGolemBoss &&
-                    (npc.type == NPCID.CultistBoss || npc.type == NPCID.MoonLordCore))
-                {
-                    UpdateNpc(args.NpcId);
-                }
-            }
-
-            if (TShock.Utils.GetActivePlayerCount() < Config.RequiredPlayersforBoss)
-            {
-                if (!NPC.downedSlimeKing && npc.type == NPCID.KingSlime ||
-                    !NPC.downedBoss1 && npc.type == NPCID.EyeofCthulhu ||
-                    (!NPC.downedBoss2 && !WorldGen.crimson && npc.type == NPCID.EaterofWorldsHead) ||
-                    (!NPC.downedBoss2 && WorldGen.crimson && npc.type == NPCID.BrainofCthulhu) ||
-                    !NPC.downedDeerclops && npc.type == NPCID.Deerclops ||
-                    !NPC.downedBoss3 && npc.type == NPCID.SkeletronHead ||
-                    !NPC.downedQueenBee && npc.type == NPCID.QueenBee ||
-                    (!Main.hardMode && npc.type == NPCID.WallofFlesh) ||
-                    !NPC.downedQueenSlime && npc.type == NPCID.QueenSlimeBoss ||
-                    !NPC.downedMechBoss1 && npc.type == NPCID.TheDestroyer ||
-                    !NPC.downedMechBoss2 && npc.type == NPCID.Retinazer ||
-                    !NPC.downedMechBoss2 && npc.type == NPCID.Spazmatism ||
-                    !NPC.downedMechBoss3 && npc.type == NPCID.SkeletronPrime ||
-                    !NPC.downedPlantBoss && npc.type == NPCID.Plantera ||
-                    !NPC.downedGolemBoss && npc.type == NPCID.Golem ||
-                    !NPC.downedFishron && npc.type == NPCID.DukeFishron ||
-                    !NPC.downedMoonlord && npc.type == NPCID.MoonLordCore ||
-                    !NPC.downedAncientCultist && npc.type == NPCID.CultistBoss ||
-                    !NPC.downedEmpressOfLight && npc.type == NPCID.HallowBoss)
-                {
-                    UpdateNpc(args.NpcId);
-                }
-            }
-
-            if (!Config.AllowKingSlime && npc.type == NPCID.KingSlime) // King Slime
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowEyeOfCthulhu && npc.type == NPCID.EyeofCthulhu) // Eye of Cthulhu
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowEaterOfWorlds && npc.type == NPCID.EaterofWorldsHead) // Eater of Worlds
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowBrainOfCthulhu && npc.type == NPCID.BrainofCthulhu) // Brain of Cthulhu
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowQueenBee && npc.type == NPCID.QueenBee) // Queen Bee
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowSkeletron && npc.type == NPCID.SkeletronHead) // Skeletron
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowDeerclops && npc.type == NPCID.Deerclops) // Deerclops
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowWallOfFlesh && npc.type == NPCID.WallofFlesh) // Wall of Flesh
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowQueenSlime && npc.type == NPCID.QueenSlimeBoss) // Queen Slime
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowTheTwins && (npc.type == NPCID.Retinazer || npc.type == NPCID.Spazmatism)) // The Twins
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowTheDestroyer && npc.type == NPCID.TheDestroyer) // The Destroyer
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowSkeletronPrime && npc.type == NPCID.SkeletronPrime) // Skeletron Prime
-            {
-                if (Main.zenithWorld)
+                if (Main.zenithWorld && npc.netID == NPCID.SkeletronPrime)
                 {
                     npc.position = new Vector2(int.MinValue, int.MinValue);
                     npc.velocity = new Vector2(int.MinValue, int.MinValue);
@@ -576,47 +504,213 @@ namespace BossManager
                 }
                 else
                 {
-                    UpdateNpc(args.NpcId);
+                    DespawnNpc(args.NpcId);
                 }
             }
-
-            if (!Config.AllowPlantera && npc.type == NPCID.Plantera) // Plantera
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowGolem && npc.type == NPCID.Golem) // Golem
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowDukeFishron && npc.type == NPCID.DukeFishron) // Duke Fishron
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowEmpressOfLight && npc.type == NPCID.HallowBoss) // Empress of Light
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowLunaticCultist && npc.type == NPCID.CultistBoss) // Lunatic Cultist
-            {
-                UpdateNpc(args.NpcId);
-            }
-
-            if (!Config.AllowMoonLord && npc.type == NPCID.MoonLordCore) // Moon Lord
-            {
-                UpdateNpc(args.NpcId);
-            }
-
         }
 
-        private void UpdateNpc(int index)
+        private void DespawnNpc(int index)
         {
             Main.npc[index].active = false;
             Main.npc[index].type = 0;
             TSPlayer.All.SendData(PacketTypes.NpcUpdate, "", index);
+        }
+
+        private bool IsSpawnerItem(Item item)
+        {
+            int[] spawnerIds = {
+                ItemID.SlimeCrown,
+                ItemID.SuspiciousLookingEye,
+                ItemID.WormFood,
+                ItemID.BloodySpine,
+                ItemID.Abeemination,
+                ItemID.DeerThing,
+                ItemID.QueenSlimeCrystal,
+                ItemID.MechanicalWorm,
+                ItemID.MechanicalEye,
+                ItemID.MechanicalSkull,
+                ItemID.MechdusaSummon,
+                ItemID.LihzahrdPowerCell,
+                ItemID.TruffleWorm,
+                ItemID.CelestialSigil
+            };
+
+            return spawnerIds.Contains(item.netID);
+        }
+
+        private bool IsBossSpawnable(int netID)
+        {
+            if (Config.PreventIllegalBoss)
+            {
+                if (!Main.hardMode &&
+                    (netID == NPCID.QueenSlimeBoss ||
+                    netID == NPCID.TheDestroyer ||
+                    netID == NPCID.Retinazer ||
+                    netID == NPCID.Spazmatism ||
+                    netID == NPCID.SkeletronPrime ||
+                    netID == NPCID.DukeFishron))
+                {
+                    return false;
+                }
+
+                if (!NPC.downedMechBoss1 && !NPC.downedMechBoss2 && !NPC.downedMechBoss3 &&
+                    netID == NPCID.Plantera)
+                {
+                    return false;
+                }
+
+                if (!NPC.downedPlantBoss &&
+                    (netID == NPCID.HallowBoss || netID == NPCID.EmpressButterfly || netID == NPCID.Golem))
+                {
+                    return false;
+                }
+
+                if (!NPC.downedGolemBoss &&
+                    (netID == NPCID.CultistBoss || netID == NPCID.MoonLordCore))
+                {
+                    return false;
+                }
+            }
+
+            if (TShock.Utils.GetActivePlayerCount() < Config.RequiredPlayersforBoss)
+            {
+                if (!NPC.downedSlimeKing && netID == NPCID.KingSlime ||
+                    !NPC.downedBoss1 && netID == NPCID.EyeofCthulhu ||
+                    (!NPC.downedBoss2 && !WorldGen.crimson && netID == NPCID.EaterofWorldsHead) ||
+                    (!NPC.downedBoss2 && WorldGen.crimson && netID == NPCID.BrainofCthulhu) ||
+                    !NPC.downedDeerclops && netID == NPCID.Deerclops ||
+                    !NPC.downedBoss3 && netID == NPCID.SkeletronHead ||
+                    !NPC.downedQueenBee && netID == NPCID.QueenBee ||
+                    (!Main.hardMode && netID == NPCID.WallofFlesh) ||
+                    !NPC.downedQueenSlime && netID == NPCID.QueenSlimeBoss ||
+                    !NPC.downedMechBoss1 && netID == NPCID.TheDestroyer ||
+                    !NPC.downedMechBoss2 && netID == NPCID.Retinazer ||
+                    !NPC.downedMechBoss2 && netID == NPCID.Spazmatism ||
+                    !NPC.downedMechBoss3 && netID == NPCID.SkeletronPrime ||
+                    !NPC.downedPlantBoss && netID == NPCID.Plantera ||
+                    !NPC.downedGolemBoss && netID == NPCID.Golem ||
+                    !NPC.downedFishron && netID == NPCID.DukeFishron ||
+                    !NPC.downedMoonlord && netID == NPCID.MoonLordCore ||
+                    !NPC.downedAncientCultist && netID == NPCID.CultistBoss ||
+                    !NPC.downedEmpressOfLight && netID == NPCID.HallowBoss)
+                {
+                    return false;
+                }
+            }
+
+            if (!Config.AllowKingSlime && netID == NPCID.KingSlime) // King Slime
+            {
+                return false;
+            }
+
+            if (!Config.AllowEyeOfCthulhu && netID == NPCID.EyeofCthulhu) // Eye of Cthulhu
+            {
+                return false;
+            }
+
+            if (!Config.AllowEaterOfWorlds && netID == NPCID.EaterofWorldsHead) // Eater of Worlds
+            {
+                return false;
+            }
+
+            if (!Config.AllowBrainOfCthulhu && netID == NPCID.BrainofCthulhu) // Brain of Cthulhu
+            {
+                return false;
+            }
+
+            if (!Config.AllowQueenBee && netID == NPCID.QueenBee) // Queen Bee
+            {
+                return false;
+            }
+
+            if (!Config.AllowSkeletron && netID == NPCID.SkeletronHead) // Skeletron
+            {
+                return false;
+            }
+
+            if (!Config.AllowDeerclops && netID == NPCID.Deerclops) // Deerclops
+            {
+                return false;
+            }
+
+            if (!Config.AllowWallOfFlesh && netID == NPCID.WallofFlesh) // Wall of Flesh
+            {
+                return false;
+            }
+
+            if (!Config.AllowQueenSlime && netID == NPCID.QueenSlimeBoss) // Queen Slime
+            {
+                return false;
+            }
+
+            if (!Config.AllowTheTwins && (netID == NPCID.Retinazer || netID == NPCID.Spazmatism)) // The Twins
+            {
+                return false;
+            }
+
+            if (!Config.AllowTheDestroyer && netID == NPCID.TheDestroyer) // The Destroyer
+            {
+                return false;
+            }
+
+            if (!Config.AllowSkeletronPrime && netID == NPCID.SkeletronPrime) // Skeletron Prime
+            {
+                return false;
+            }
+
+            if (!Config.AllowPlantera && netID == NPCID.Plantera) // Plantera
+            {
+                return false;
+            }
+
+            if (!Config.AllowGolem && netID == NPCID.Golem) // Golem
+            {
+                return false;
+            }
+
+            if (!Config.AllowDukeFishron && netID == NPCID.DukeFishron) // Duke Fishron
+            {
+                return false;
+            }
+
+            if (!Config.AllowEmpressOfLight && netID == NPCID.HallowBoss) // Empress of Light
+            {
+                return false;
+            }
+
+            if (!Config.AllowLunaticCultist && netID == NPCID.CultistBoss) // Lunatic Cultist
+            {
+                return false;
+            }
+
+            if (!Config.AllowMoonLord && netID == NPCID.MoonLordCore) // Moon Lord
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private int GetBossNetIDFromSpawner(int itemID)
+        {
+            return itemID switch
+            {
+                ItemID.SlimeCrown => NPCID.KingSlime,
+                ItemID.SuspiciousLookingEye => NPCID.EyeofCthulhu,
+                ItemID.WormFood => NPCID.EaterofWorldsHead,
+                ItemID.BloodySpine => NPCID.BrainofCthulhu,
+                ItemID.Abeemination => NPCID.QueenBee,
+                ItemID.DeerThing => NPCID.Deerclops,
+                ItemID.QueenSlimeCrystal => NPCID.QueenSlimeBoss,
+                ItemID.MechanicalWorm => NPCID.TheDestroyer,
+                ItemID.MechanicalEye => NPCID.Retinazer,
+                ItemID.MechanicalSkull => NPCID.SkeletronPrime,
+                ItemID.MechdusaSummon => NPCID.SkeletronPrime,
+                ItemID.LihzahrdPowerCell => NPCID.Golem,
+                ItemID.TruffleWorm => NPCID.DukeFishron,
+                ItemID.CelestialSigil => NPCID.MoonLordCore,
+                _ => 0,
+            };
         }
     }
 }
