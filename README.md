@@ -2,6 +2,8 @@
 # BossManager
 A TShock plugin for Terraria which adds more Boss Management Tools. [Download](https://github.com/Soof4/BossManager/releases/latest/download/BossManager.dll)
 
+If you want to read this in another language: [Spanish](https://github.com/Soof4/BossManager/blob/main/README_SPANISH.md)
+
 ## How to Install
 - Download the Plugin file [here!](https://github.com/Soof4/BossManager/releases/latest/download/BossManager.dll)
 - Drop the `BossManager.dll` File into the `ServerPlugins` folder
