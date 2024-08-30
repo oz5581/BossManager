@@ -241,6 +241,13 @@ namespace BossManager
                         args.Player.SendInfoMessage($"Set {(WorldGen.crimson ? "Brain of Cthulhu" : "Eater of Worlds")} as {(NPC.downedBoss2 ? "[c/FF0000:Killed]" : "[c/00FF00:Not Killed]")}!");
                         return;
                     }
+                case "deer":
+                case "deerclops":
+                    {
+                        NPC.downedDeerclops = !NPC.downedDeerclops;
+                        args.Player.SendInfoMessage($"Set Deerclops as {(NPC.downedDeerclops ? "[c/FF0000:Killed]" : "[c/00FF00:Not Killed]")}!");
+                        return;
+                    }
                 case "skeletron":
                 case "sans":
                     {
